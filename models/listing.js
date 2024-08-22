@@ -24,5 +24,5 @@ const ListingSchema = new Schema({
   country: String,
 });
 
-const Listing = mongoose.model("Listening", ListingSchema);
+const Listing = mongoose.model("Listing", ListingSchema);
 module.exports = Listing;
