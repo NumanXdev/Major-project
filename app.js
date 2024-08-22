@@ -47,7 +47,7 @@ app.get("/listings",async (req,res)=>{
   res.render("index.ejs",{allListings});
 })
 
-
+ 
 app.listen(8080, (req, res) => {
   console.log("Listening");
 });
