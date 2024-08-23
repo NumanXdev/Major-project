@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 const listing = require("./models/listing");
-const path=require("path")  //ejs
+const path = require("path"); //ejs
 
 const MONGOOSE_URL = "mongodb://127.0.0.1:27017/wanderlust";
 
@@ -18,12 +18,12 @@ async function main() {
   await mongoose.connect(MONGOOSE_URL);
 }
 
-app.set("view engine","ejs")
-
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views"));
+app.use(express.urlencoded({extended:true}))
 app.get("/", (req, res) => {
   res.send("All fine");
 });
-
 
 //TESTING
 
@@ -39,15 +39,42 @@ app.get("/", (req, res) => {
 //   await sampleListing.save();
 //   console.log("Sample was saved");
 //   res.send("Successfull testing");
-  
+
 // });
 
-app.get("/listings",async (req,res)=>{
+//Index route
+app.get("/listings", async (req, res) => {
   const allListings = await listing.find({});
-  res.render("index.ejs",{allListings});
+  res.render("listings/index.ejs", { allListings });
+});
+// Create route
+app.get("/listings/new",(req,res)=>{
+  // res.send("Working")
+  res.render("listings/new.ejs");
+});
+
+//show route
+app.get("/listings/:id", async(req, res) => {
+  // res.send("Working")
+  let { id } = req.params;
+  const data = await listing.findById(id);
+  // console.log(data)
+  res.render("listings/show.ejs",{data})
+});
+
+//Create route
+app.post("/listings", async (req,res)=>{
+//let {title,description,price,image,country,location}=req.body
+// let listing=req.body;
+// console.log(listing)
+
+const newListing= new listing(req.body);
+await newListing.save();
+redirect("/listings")
 })
 
- 
+
+
 app.listen(8080, (req, res) => {
   console.log("Listening");
 });

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h3>listings Details :</h3>
+    <ul>
+      <li><%=data.title%></li>
+      <li><%= data.description %></li>
+      <!-- locale is used to use commas(price commas) acc to region as IN is used i.e India -->
+      <li> &#8377;<%= data.price.toLocaleString("en-IN") %></li>
+      <li><%=data.location%></li>
+      <li><%=data.country%></li>
+    </ul>
+  </body> 
+</html>
