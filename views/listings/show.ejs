@@ -10,7 +10,7 @@
     <ul>
       <li><%=data.title%></li>
       <li><%= data.description %></li>
-      <!-- locale is used to use commas(price commas) acc to region as IN is used i.e India -->
+      <!-- locale is used to put commas in price (price commas)-> determined acc to region as IN is for India -->
       <li> &#8377;<%= data.price.toLocaleString("en-IN") %></li>
       <li><%=data.location%></li>
       <li><%=data.country%></li>
