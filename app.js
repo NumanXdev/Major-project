@@ -72,7 +72,7 @@ app.post("/listings", async (req, res) => {
   // console.log(listing); ///this will return listing object
 
   const newListing = new listing(req.body.listing); // this will access that and will add that to database
-
+//req.body.listing is in the form of object "new lisiting({})"
   await newListing.save();
   res.redirect("/listings");
 });
