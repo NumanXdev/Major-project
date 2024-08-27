@@ -1,6 +1,8 @@
-/* body{
-    background-color: pink;
-} */
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap");
+
+body {
+  font-family: "Plus Jakarta Sans", sans-serif !important;
+}
 
 .navbar {
   height: 5rem;
@@ -46,3 +48,35 @@
   justify-content: center;
   flex-wrap: wrap;
 }
+
+/* cards */
+.card {
+  border: none !important;
+  margin-bottom: 2rem;
+}
+.card-img-top {
+  border-radius: 1rem !important ;
+  width: 100% !important;
+  object-fit: cover !important;
+}
+.card-body {
+  padding: 0 !important;
+}
+
+.card-body p {
+  font-weight: 400;
+}
+
+.listing-link {
+  text-decoration: none;
+}
+
+/* Card effect */
+.card-img-overlay {
+  opacity: 0;
+}
+.card-img-overlay:hover {
+  opacity: .1;
+  background-color: white;
+}
+
