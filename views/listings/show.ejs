@@ -1,18 +1,39 @@
 <% layout("/layouts/biolerplate") %>
-  <body>
-    <h3>listings Details :</h3>
-    <ul>
-      <li><%=data.title%></li>
-      <li><%= data.description %></li>
-      <!-- locale is used to put commas in price (price commas)-> determined acc to region as IN is for India -->
-      <li> &#8377;<%= data.price.toLocaleString("en-IN") %></li>
-      <li><%=data.location%></li>
-      <li><%=data.country%></li>
-    </ul>
-    <a href="/listings/<%=data._id%>/edit">Edit...</a>
-    <form method="POST" action="/listings/<%=data._id%>?_method=DELETE">
-     <br> <button>Delete this Listing</button>
-    </form>
-   
-  </body> 
 
+<div class="row mt-3">
+  <div class="col-8 offset-3">
+    <h3>listings Details</h3>
+  </div>
+
+  <!-- <div class="card col-6 offset-2">
+   <div class="show-card mt-3"> -->
+  <!-- <div class="card" > //style="width: 18rem" -->
+  <div class="card col-6 offset-3" style="width: 32vmax;">
+    <img
+      src="<%=data.image%>"
+      class="card-img-top show-image"
+      alt="Listing
+      Details"
+    />
+    <div class="card-body">
+      <p class="card-text">
+        <b><%=data.title%></b> <br />
+        <%= data.description %> <br />
+        &#8377;<%= data.price.toLocaleString("en-IN") %> <br />
+        <%=data.location%> <br />
+        <%=data.country%>
+      </p>
+    </div>
+  </div>
+
+  <div class="btns">
+    <a href="/listings/<%=data._id%>/edit" class="btn btn-dark offset-3 add-btn"
+      >Edit</a
+    >
+
+    <form method="POST" action="/listings/<%=data._id%>?_method=DELETE">
+     
+      <button class="btn btn-dark offset-5">Delete</button>
+    </form>
+  </div>
+</div>
