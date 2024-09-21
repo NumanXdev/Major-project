@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const listing = require("./models/listing");
 const path = require("path"); //ejs
 const methodOverride = require("method-override");
-const ejsMate = require("ejs-mate");
+const ejsMate = require("ejs-mate"); //When called anywhere inside a template, requests that the output of the current template be passed to the given view as the body local.
 
 const MONGOOSE_URL = "mongodb://127.0.0.1:27017/wanderlust";
 
