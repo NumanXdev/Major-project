@@ -318,6 +318,15 @@ const sampleListings = [
     location: "Costa Rica",
     country: "Costa Rica",
   },
+  {
+    title: "Countryside Cottage in England",
+    description: "Charming English countryside cottage with a thatched roof and beautiful gardens.",
+    image: "https://images.unsplash.com/photo-1597005664757-cbf2d198391f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8Y291bnRyeXNpZGUlMjBjb3R0YWdlfGVufDB8fDB8fHww&auto=format&fit=crop&w=800&q=60",
+    price: 1500,
+    location: "Cotswolds, England",
+    country: "United Kingdom"
+  }
+
 ];
 
 module.exports = { data: sampleListings };
