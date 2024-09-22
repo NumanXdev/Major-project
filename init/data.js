@@ -321,7 +321,7 @@ const sampleListings = [
   {
     title: "Countryside Cottage in England",
     description: "Charming English countryside cottage with a thatched roof and beautiful gardens.",
-    image: "https://images.unsplash.com/photo-1597005664757-cbf2d198391f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8Y291bnRyeXNpZGUlMjBjb3R0YWdlfGVufDB8fDB8fHww&auto=format&fit=crop&w=800&q=60",
+    image: "https://images.pexels.com/photos/619873/pexels-photo-619873.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" ,
     price: 1500,
     location: "Cotswolds, England",
     country: "United Kingdom"
