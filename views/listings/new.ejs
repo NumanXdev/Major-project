@@ -2,7 +2,7 @@
 <br><br>
 
 
-<form action="/listings" method="POST">
+<form action="/listings" method="POST" class="needs-validation" novalidate>
  
 
 
@@ -16,8 +16,12 @@
       name="listing[title]"
       placeholder="Add a Catchy title"
       class="form-control"
+      required
     
     />
+    <div class="valid-feedback">Title looks good!.</div>
+    <div class="invalid-feedback">Title should be valid.</div>
+     
   </div>
 
   <div class="mb-3">
@@ -26,7 +30,9 @@
       name="listing[description]"
       placeholder="Enter description"
       class="form-control"
+      required
     ></textarea>
+    <div class="invalid-feedback">Description should be valid.</div>
   </div>
 
   <div class="mb-3">
@@ -48,8 +54,12 @@
           name="listing[price]"
           placeholder="1200"
           class="form-control"
+          required
+          
         />
+        <div class="invalid-feedback">Price should be valid.</div>
       </div>
+    
     </div>
   
   <div class="col-md-8">
@@ -60,7 +70,9 @@
         name="listing[location]"
         placeholder="Enter location"
         class="form-control"
+        required
       />
+      <div class="invalid-feedback">Location should be valid.</div>
     </div>
   </div>
   
@@ -74,7 +86,9 @@
       name="listing[country]"
       placeholder="India"
       class="form-control"
+      required
     />
+    <div class="invalid-feedback">Country should be valid.</div>
   </div>
 
   <button class="btn btn-dark add-btn">Submit</button><br><br>
