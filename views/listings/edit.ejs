@@ -3,7 +3,7 @@
 <div class="row">
   <div class="col-8 offset-2">
     <h3>Edit Listing</h3>
-    <form method="POST" action="/listings/<%=Listing._id%>?_method=PUT">
+    <form method="POST" action="/listings/<%=Listing._id%>?_method=PUT" novalidate class="needs-validation">
       <div class="mb-3">
         <label for="title" class="form-label">Title</label>
         <input
@@ -11,14 +11,18 @@
           name="listing[title]"
           value="<%=Listing.title%>"
           class="form-control"
+          required
         />
+        <div class="valid-feedback">Title looks good!.</div>
+        <div class="invalid-feedback">Title should be valid.</div>
       </div>
 
       <div class="mb-3">
         <label for="description" class="form-label">Description</label>
-        <textarea name="listing[description]" class="form-control">
+        <textarea name="listing[description]" class="form-control" required >
 <%=Listing.description%></textarea
         >
+        <div class="invalid-feedback">Description should be valid.</div>
       </div>
 
       <div class="mb-3">
@@ -28,7 +32,10 @@
           name="listing[image]"
           value="<%=Listing.image%>"
           class="form-control"
+          required
+          
         />
+        <div class="invalid-feedback">Enter the valid image link.</div>
       </div>
 
       <div class="row" >
@@ -40,7 +47,9 @@
               name="listing[price]"
               value="<%=Listing.price%>"
               class="form-control"
+              required
             />
+            <div class="invalid-feedback">Price should be valid</div>
           </div>
         </div>
 
@@ -52,7 +61,9 @@
               name="listing[country]"
               value="<%=Listing.country%>"
               class="form-control"
+              required
             />
+            <div class="invalid-feedback">Country should be valid</div>
           </div>
         </div>
       </div>
@@ -64,7 +75,9 @@
           name="listing[location]"
           value="<%=Listing.location%>"
           class="form-control"
+          required
         />
+        <div class="invalid-feedback">Location should be valid</div>
       </div>
  
     
