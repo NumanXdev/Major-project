@@ -51,24 +51,24 @@ app.get("/", (req, res) => {
 // });
 
 //Index route
-app.get("/listings", async (req, res) => {
+app.get("/listings",  wrapAsync (async (req, res) => {
   const allListings = await listing.find({});
   res.render("listings/index.ejs", { allListings });
-});
+}));
 // Create route
-app.get("/listings/new", (req, res) => {
+app.get("/listings/new",  wrapAsync ((req, res) => {
   // res.send("Working")
   res.render("listings/new.ejs");
-});
+}));
 
 //show route
-app.get("/listings/:id", async (req, res) => {
+app.get("/listings/:id",  wrapAsync (async (req, res) => {
   // res.send("Working")
   let { id } = req.params;
   const data = await listing.findById(id);
   // console.log(data)
   res.render("listings/show.ejs", { data });
-});
+}));
 
 //Create route
 app.post("/listings", wrapAsync (async (req, res, next) => {
@@ -85,33 +85,33 @@ app.post("/listings", wrapAsync (async (req, res, next) => {
 
 //Update Route
 
-app.get("/listings/:id/edit", async (req, res) => {
+app.get("/listings/:id/edit",  wrapAsync (async (req, res) => {
   // res.send("Working!")
   let { id } = req.params;
   const Listing = await listing.findById(id);
   res.render("listings/edit.ejs", { Listing });
-});
+}));
 
-app.put("/listings/:id", async (req, res) => {
+app.put("/listings/:id",  wrapAsync (async (req, res) => {
   let { id } = req.params;
   await listing.findByIdAndUpdate(id, { ...req.body.listing }); //deconstruct kr k individual parameter me convert kiya
   // const listing = req.body.listings;/
   res.redirect(`/listings/${id}`);
-});
+}));
 
 //Delete route
-app.delete("/listings/:id", async (req, res) => {
+app.delete("/listings/:id",  wrapAsync (async (req, res) => {
   let { id } = req.params;
   await listing.findByIdAndDelete(id);
   res.redirect("/listings");
-});
+}));
 
 app.use("*",(req,res,next)=>{
-  next(new ExpressError(404,"Page Not Found!"));
+  next(new ExpressError(404,"Page Not Found"));
 })
 
 app.use((err, req, res,next) => {
- let{status=500,message}=err;
+ let{status,message}=err;
  res.status(status).send(message);
 });
 
