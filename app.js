@@ -5,6 +5,8 @@ const listing = require("./models/listing");
 const path = require("path"); //ejs
 const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate"); //When called anywhere inside a template, requests that the output of the current template be passed to the given view as the body local.
+const wrapAsync=require("./utils/wrapAsync.js")
+const ExpressError=require("./utils/ExpressError.js");
 
 const MONGOOSE_URL = "mongodb://127.0.0.1:27017/wanderlust";
 
@@ -69,16 +71,17 @@ app.get("/listings/:id", async (req, res) => {
 });
 
 //Create route
-app.post("/listings", async (req, res) => {
+app.post("/listings", wrapAsync (async (req, res, next) => {
   //let {title,description,price,image,country,location}=req.body
   // let listing=req.body;
   // console.log(listing); ///this will return listing object
-
-  const newListing = new listing(req.body.listing); // this will access that and will add that to database
-  //req.body.listing is in the form of object "new lisiting({})"
-  await newListing.save();
-  res.redirect("/listings");
-});
+  
+    const newListing = new listing(req.body.listing); // this will access that and will add that to database
+    //req.body.listing is in the form of object "new lisiting({})"
+    await newListing.save();
+    res.redirect("/listings");
+})
+);
 
 //Update Route
 
@@ -101,6 +104,15 @@ app.delete("/listings/:id", async (req, res) => {
   let { id } = req.params;
   await listing.findByIdAndDelete(id);
   res.redirect("/listings");
+});
+
+app.use("*",(req,res,next)=>{
+  next(new ExpressError(404,"Page Not Found!"));
+})
+
+app.use((err, req, res,next) => {
+ let{status=500,message}=err;
+ res.status(status).send(message);
 });
 
 app.listen(8080, (req, res) => {
