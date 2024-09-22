@@ -75,7 +75,9 @@ app.post("/listings", wrapAsync (async (req, res, next) => {
   //let {title,description,price,image,country,location}=req.body
   // let listing=req.body;
   // console.log(listing); ///this will return listing object
-  
+  if(!req.body.listing){
+    throw new ExpressError(400,"Send Valid Data for Listings")
+  }
     const newListing = new listing(req.body.listing); // this will access that and will add that to database
     //req.body.listing is in the form of object "new lisiting({})"
     await newListing.save();
@@ -87,6 +89,9 @@ app.post("/listings", wrapAsync (async (req, res, next) => {
 
 app.get("/listings/:id/edit",  wrapAsync (async (req, res) => {
   // res.send("Working!")
+  if(!req.body.listing){
+    throw new ExpressError(400,"Send Valid Data for Listings")
+  }
   let { id } = req.params;
   const Listing = await listing.findById(id);
   res.render("listings/edit.ejs", { Listing });
@@ -111,7 +116,7 @@ app.use("*",(req,res,next)=>{
 })
 
 app.use((err, req, res,next) => {
- let{status,message}=err;
+ let{status=500,message="Something Went Wrong!"}=err;
  res.status(status).send(message);
 });
 
