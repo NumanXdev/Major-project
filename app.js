@@ -8,6 +8,9 @@ const ejsMate = require("ejs-mate"); //When called anywhere inside a template, r
 const wrapAsync = require("./utils/wrapAsync.js");
 const ExpressError = require("./utils/ExpressError.js");
 
+//we are exporting ListingSchema as a property of an object (module.exports.ListingSchema). This means that when you import it, you need to destructure it:
+const { ListingSchema } = require("./schema.js");
+
 const MONGOOSE_URL = "mongodb://127.0.0.1:27017/wanderlust";
 
 main()
@@ -57,14 +60,12 @@ app.get(
     const allListings = await listing.find({});
     res.render("listings/index.ejs", { allListings });
   })
-); 
+);
 // Create route
-app.get(
-  "/listings/new",
- (req, res) => {
-    // res.send("Working")
-    res.render("listings/new.ejs");
-  });
+app.get("/listings/new", (req, res) => {
+  // res.send("Working")
+  res.render("listings/new.ejs");
+});
 
 //show route
 app.get(
@@ -87,6 +88,11 @@ app.post(
     // console.log(listing); ///this will return listing object
     if (!req.body.listing) {
       throw new ExpressError(400, "Send Valid Data for Listings");
+    }
+    let result = ListingSchema.validate(req.body);
+    console.log(result);
+    if(result.error){
+      throw new ExpressError(400,result.error)
     }
     const newListing = new listing(req.body.listing); // this will access that and will add that to database
     //req.body.listing is in the form of object "new lisiting({})"
