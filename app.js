@@ -53,6 +53,19 @@ app.get("/", (req, res) => {
 
 // });
 
+//Making function of validation using it as a middleware
+
+const validateListing = (req, res, next) => {
+  let {error} = ListingSchema.validate(req.body);
+  console.log(error.details);
+  if (error) {
+    let errMsg = error.details.map((el) => el.message).join(",");
+    throw new ExpressError(400, errMsg);
+  } else {
+    next();
+  }
+};
+
 //Index route
 app.get(
   "/listings",
@@ -82,18 +95,14 @@ app.get(
 //Create route
 app.post(
   "/listings",
+  validateListing, //middleware of validation schema
   wrapAsync(async (req, res, next) => {
     //let {title,description,price,image,country,location}=req.body
     // let listing=req.body;
     // console.log(listing); ///this will return listing object
-    if (!req.body.listing) {
-      throw new ExpressError(400, "Send Valid Data for Listings");
-    }
-    let result = ListingSchema.validate(req.body);
-    console.log(result);
-    if(result.error){
-      throw new ExpressError(400,result.error)
-    }
+    // if (!req.body.listing) {
+    //   throw new ExpressError(400, "Send Valid Data for Listings");
+    // }
     const newListing = new listing(req.body.listing); // this will access that and will add that to database
     //req.body.listing is in the form of object "new lisiting({})"
     await newListing.save();
@@ -115,6 +124,7 @@ app.get(
 
 app.put(
   "/listings/:id",
+  validateListing, //Middleware for Validation Schema
   wrapAsync(async (req, res) => {
     let { id } = req.params;
     await listing.findByIdAndUpdate(id, { ...req.body.listing }); //deconstruct kr k individual parameter me convert kiya
