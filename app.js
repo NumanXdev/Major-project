@@ -7,9 +7,10 @@ const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate"); //When called anywhere inside a template, requests that the output of the current template be passed to the given view as the body local.
 const wrapAsync = require("./utils/wrapAsync.js");
 const ExpressError = require("./utils/ExpressError.js");
-
+const review = require("./models/review.js");
+const { ListingSchema,reviewSchema } = require("./schema.js");
 //we are exporting ListingSchema as a property of an object (module.exports.ListingSchema). This means that when you import it, you need to destructure it:
-const { ListingSchema } = require("./schema.js");
+
 
 const MONGOOSE_URL = "mongodb://127.0.0.1:27017/wanderlust";
 
@@ -54,9 +55,9 @@ app.get("/", (req, res) => {
 // });
 
 //Making function of validation using it as a middleware
-
+//for listing (Server side)
 const validateListing = (req, res, next) => {
-  let {error} = ListingSchema.validate(req.body);
+  let { error } = ListingSchema.validate(req.body);
   console.log(error.details);
   if (error) {
     let errMsg = error.details.map((el) => el.message).join(",");
@@ -65,6 +66,24 @@ const validateListing = (req, res, next) => {
     next();
   }
 };
+
+
+//for Review serverside MW
+
+const validateReview = (req, res, next) => {
+  console.log(req.body)
+  let { error } = reviewSchema.validate(req.body);
+  
+  if (error) {
+    console.log(error.details);
+    let errMsg = error.details.map((el) => el.message).join(",");
+    throw new ExpressError(400, errMsg);
+  } else {
+    next();
+  }
+};
+
+
 
 //Index route
 app.get(
@@ -145,6 +164,24 @@ app.delete(
     res.redirect("/listings");
   })
 );
+
+//Reviews
+//Post Route
+
+app.post("/listings/:id/reviews", validateReview, wrapAsync(async(req, res) => {
+  // let {id}=req.params;
+  let listings = await listing.findById(req.params.id);
+  let newReview = new review(req.body.review);
+  console.log(newReview);
+
+  listings.reviews.push(newReview);
+  await newReview.save();
+  await listings.save();
+
+  console.log("New review saved");
+  // res.send("Saved")
+  res.redirect(`/listings/${listings._id}`);  //or listings._id
+})) ;
 
 app.use("*", (req, res, next) => {
   next(new ExpressError(404, "Page Not Found"));
