@@ -8,7 +8,7 @@
   <!-- <div class="card col-6 offset-2">
    <div class="show-card mt-3"> -->
   <!-- <div class="card" > //style="width: 18rem" -->
-  <div class="card col-6 offset-3" style="width: 32vmax;">
+  <div class="card col-6 offset-3" style="width: 32vmax">
     <img
       src="<%=data.image%>"
       class="card-img-top show-image"
@@ -31,8 +31,47 @@
     >
 
     <form method="POST" action="/listings/<%=data._id%>?_method=DELETE">
-     
       <button class="btn btn-dark offset-5">Delete</button>
     </form>
   </div>
-</div> 
+
+  <div class="col-8 offset-3 mb-3">
+    <hr />
+    <h4>Leave a Review</h4>
+    <form
+      action="/listings/<%= data.id %>/reviews"
+      method="POST"
+      novalidate
+      class="needs-validation"
+    >
+      <div class="mb-3 mt-3">
+        <label for="rating" class="form-label">Rating</label>
+        <input
+          type="range"
+          min="1"
+          max="5"
+          id="rating"
+          class="form-range"
+          name="review[rating]"
+        />
+      </div>
+      <div>
+        <label for="comment" class="form-label">Comment</label>
+        <textarea
+          name="review[comment]"
+          class="form-control mb-2"
+          id="comment"
+          cols="30"
+          rows="5"
+          required
+        ></textarea>
+        <div class="invalid-feedback">Please add some comments for review</div>
+      </div>
+      <button class="btn btn-outline-dark btn-control">Submit</button>
+    </form>
+
+    <hr>
+    <h4>All Reviews</h4>
+    <p><%=data.reviews%></p>
+  </div>
+</div>
