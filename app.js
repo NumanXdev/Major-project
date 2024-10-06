@@ -69,7 +69,7 @@ const validateListing = (req, res, next) => {
 //for Review serverside MW
 
 const validateReview = (req, res, next) => {
-  console.log(req.body);
+  // console.log(req.body);
   let { error } = reviewSchema.validate(req.body);
 
   if (error) {
@@ -177,7 +177,7 @@ app.post(
     await newReview.save();
     await listings.save();
 
-    console.log("New review saved");
+    // console.log("New review saved");
     // res.send("Saved")
     res.redirect(`/listings/${listings._id}`); //or listings._id
   })
