@@ -8,9 +8,8 @@ const ejsMate = require("ejs-mate"); //When called anywhere inside a template, r
 const wrapAsync = require("./utils/wrapAsync.js");
 const ExpressError = require("./utils/ExpressError.js");
 const review = require("./models/review.js");
-const { ListingSchema,reviewSchema } = require("./schema.js");
+const { ListingSchema, reviewSchema } = require("./schema.js");
 //we are exporting ListingSchema as a property of an object (module.exports.ListingSchema). This means that when you import it, you need to destructure it:
-
 
 const MONGOOSE_URL = "mongodb://127.0.0.1:27017/wanderlust";
 
@@ -67,13 +66,12 @@ const validateListing = (req, res, next) => {
   }
 };
 
-
 //for Review serverside MW
 
 const validateReview = (req, res, next) => {
-  console.log(req.body)
+  console.log(req.body);
   let { error } = reviewSchema.validate(req.body);
-  
+
   if (error) {
     console.log(error.details);
     let errMsg = error.details.map((el) => el.message).join(",");
@@ -82,8 +80,6 @@ const validateReview = (req, res, next) => {
     next();
   }
 };
-
-
 
 //Index route
 app.get(
@@ -105,7 +101,7 @@ app.get(
   wrapAsync(async (req, res) => {
     // res.send("Working")
     let { id } = req.params;
-    const data = await listing.findById(id);
+    const data = await listing.findById(id).populate("reviews");
     // console.log(data)
     res.render("listings/show.ejs", { data });
   })
@@ -166,22 +162,37 @@ app.delete(
 );
 
 //Reviews
-//Post Route
+//Post Review Route
 
-app.post("/listings/:id/reviews", validateReview, wrapAsync(async(req, res) => {
-  // let {id}=req.params;
-  let listings = await listing.findById(req.params.id);
-  let newReview = new review(req.body.review);
-  console.log(newReview);
+app.post(
+  "/listings/:id/reviews",
+  validateReview,
+  wrapAsync(async (req, res) => {
+    // let {id}=req.params;
+    let listings = await listing.findById(req.params.id);
+    let newReview = new review(req.body.review);
+    console.log(newReview);
 
-  listings.reviews.push(newReview);
-  await newReview.save();
-  await listings.save();
+    listings.reviews.push(newReview);
+    await newReview.save();
+    await listings.save();
 
-  console.log("New review saved");
-  // res.send("Saved")
-  res.redirect(`/listings/${listings._id}`);  //or listings._id
-})) ;
+    console.log("New review saved");
+    // res.send("Saved")
+    res.redirect(`/listings/${listings._id}`); //or listings._id
+  })
+);
+
+//Delete Review Route
+app.delete(
+  "/listings/:id/review/:reviewId",
+  wrapAsync(async (req, res) => {
+    let { id, reviewId } = req.params;
+    await listing.findByIdAndUpdate(id, { $pull: { reviews: reviewId } }); //Using $pull to delete the objectId in review array
+    await review.findByIdAndDelete(reviewId);
+    res.redirect(`/listings/${id}`);
+  })
+);
 
 app.use("*", (req, res, next) => {
   next(new ExpressError(404, "Page Not Found"));
