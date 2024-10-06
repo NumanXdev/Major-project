@@ -57,8 +57,8 @@ app.get("/", (req, res) => {
 //for listing (Server side)
 const validateListing = (req, res, next) => {
   let { error } = ListingSchema.validate(req.body);
-  console.log(error.details);
   if (error) {
+    // console.log(error.details);
     let errMsg = error.details.map((el) => el.message).join(",");
     throw new ExpressError(400, errMsg);
   } else {
@@ -171,7 +171,7 @@ app.post(
     // let {id}=req.params;
     let listings = await listing.findById(req.params.id);
     let newReview = new review(req.body.review);
-    console.log(newReview);
+    // console.log(newReview);
 
     listings.reviews.push(newReview);
     await newReview.save();
@@ -199,6 +199,7 @@ app.use("*", (req, res, next) => {
 });
 
 app.use((err, req, res, next) => {
+  console.log(err);
   let { status = 500, message = "Something Went Wrong!" } = err;
   //  res.status(status).send(message);
   res.status(status).render("error.ejs", { message });
