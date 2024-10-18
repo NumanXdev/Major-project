@@ -58,6 +58,7 @@ router.post(
     const newListing = new listing(req.body.listing); // this will access that and will add that to database
     //req.body.listing is in the form of object "new lisiting({})"
     await newListing.save();
+    req.flash("success","New Listing Successfully Created!")
     return res.redirect("/listings");
   })
 );

@@ -6,7 +6,8 @@ const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate"); //When called anywhere inside a template, requests that the output of the current template be passed to the given view as the body local.
 const ExpressError = require("./utils/ExpressError.js");
 //we are exporting ListingSchema as a property of an object (module.exports.ListingSchema). This means that when you import it, you need to destructure it:
-const session=require("express-session");
+const session = require("express-session");
+const flash = require("connect-flash");
 
 const listings = require("./routes/listing.js");
 const reviews = require("./routes/review.js");
@@ -49,23 +50,28 @@ app.get("/testListing", async (req, res) => {
 });
 */
 
-
 //USING EXPRESS SESSIONS
-sessionOption={
-  secret:"mysupersecretcode",
-  resave:false,
+sessionOption = {
+  secret: "mysupersecretcode",
+  resave: false,
   saveUninitialized: true,
-  cookie:{
-    expires:Date.now()+ 7 * 24 * 60 *60 *1000,
-    maxAge:  7 * 24 * 60 *60 *1000,
+  cookie: {
+    expires: Date.now() + 7 * 24 * 60 * 60 * 1000,
+    maxAge: 7 * 24 * 60 * 60 * 1000,
     httpOnly: true,
-  }
-}
-
-app.use(session(sessionOption));
+  },
+};
 
 app.get("/", (req, res) => {
   res.send("All fine");
+});
+
+app.use(session(sessionOption));
+app.use(flash());
+
+app.use((req, res, next) => {
+  res.locals.success = req.flash("success");
+  next();
 });
 
 app.use("/listings", listings);
