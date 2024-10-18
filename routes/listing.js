@@ -40,6 +40,10 @@ router.get(
     let { id } = req.params;
     const data = await listing.findById(id).populate("reviews");
     // console.log(data)
+    if (!data) {
+      req.flash("error", "Listing you requested for doesn't exist");
+      res.redirect("/listings");
+    }
     res.render("listings/show.ejs", { data });
   })
 );
@@ -71,6 +75,10 @@ router.get(
     // res.send("Working!")
     let { id } = req.params;
     const Listing = await listing.findById(id);
+    if (!Listing) {
+      req.flash("error", "Listing you requested for doesn't exist");
+      res.redirect("/listings");
+    }
     res.render("listings/edit.ejs", { Listing });
   })
 );
