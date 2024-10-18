@@ -58,7 +58,7 @@ router.post(
     const newListing = new listing(req.body.listing); // this will access that and will add that to database
     //req.body.listing is in the form of object "new lisiting({})"
     await newListing.save();
-    req.flash("success","New Listing Successfully Created!")
+    req.flash("success", "New Listing Successfully Created!");
     return res.redirect("/listings");
   })
 );
@@ -75,6 +75,7 @@ router.get(
   })
 );
 
+//Update Route
 router.put(
   "/:id",
   validateListing, //Middleware for Validation Schema
@@ -85,6 +86,7 @@ router.put(
     if (!req.body.listing) {
       throw new ExpressError(400, "Send Valid Data for Listings");
     }
+    req.flash("success", "Listing Updated Succesfully!");
     res.redirect(`/listings/${id}`);
   })
 );
@@ -95,6 +97,7 @@ router.delete(
   wrapAsync(async (req, res) => {
     let { id } = req.params;
     await listing.findByIdAndDelete(id);
+    req.flash("success", "Listening Deleted!");
     res.redirect("/listings");
   })
 );

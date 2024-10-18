@@ -1,10 +1,10 @@
 const express = require("express");
-const router = express.Router({mergeParams:true});
+const router = express.Router({ mergeParams: true });
 const listing = require("../models/listing");
 const wrapAsync = require("../utils/wrapAsync.js");
 const ExpressError = require("../utils/ExpressError.js");
 const review = require("../models/review.js");
-const {reviewSchema } = require("../schema.js");
+const { reviewSchema } = require("../schema.js");
 
 //for Review serverside MW
 const validateReview = (req, res, next) => {
@@ -39,6 +39,7 @@ router.post(
 
     // console.log("New review saved");
     // res.send("Saved")
+    req.flash("success", "New Review Created!");
     res.redirect(`/listings/${listings._id}`); //or listings._id
   })
 );
@@ -50,9 +51,10 @@ router.delete(
     let { id, reviewId } = req.params;
     await listing.findByIdAndUpdate(id, { $pull: { reviews: reviewId } }); //Using $pull to delete the objectId in review array
     await review.findByIdAndDelete(reviewId);
+
+    req.flash("success", "Review Deleted!");
     res.redirect(`/listings/${id}`);
   })
 );
 
-
-module.exports=router;
+module.exports = router;
