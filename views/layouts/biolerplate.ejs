@@ -22,7 +22,9 @@
   </head>
   <body>
     <%- include("../includes/navbar.ejs")%>
-    <div class="container"><%-body%></div>
+    <div class="container">
+      <%- include("../includes/flash.ejs")%> <%-body%>
+    </div>
     <!-- only body will be changed rest will be same    -->
 
     <%- include("../includes/footer.ejs") %>
