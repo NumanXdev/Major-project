@@ -8,6 +8,9 @@ const ExpressError = require("./utils/ExpressError.js");
 //we are exporting ListingSchema as a property of an object (module.exports.ListingSchema). This means that when you import it, you need to destructure it:
 const session = require("express-session");
 const flash = require("connect-flash");
+const passport = require("passport");
+const localStrategy = require("passport-local");
+const User = require("./models/User.js");
 
 const listings = require("./routes/listing.js");
 const reviews = require("./routes/review.js");
@@ -69,11 +72,27 @@ app.get("/", (req, res) => {
 app.use(session(sessionOption));
 app.use(flash());
 
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new localStrategy(User.authenticate()));
+
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
 app.use((req, res, next) => {
   res.locals.success = req.flash("success");
   res.locals.error = req.flash("error");
   // console.log(res.locals.success);
   next();
+});
+
+app.get("/demoUser", async (req, res) => {
+  let fakeUser = new User({
+    email: "studdent@gmail.com",
+    username: "Dellta-Student",
+  });
+  let registeredUser = await User.register(fakeUser, "HelloWorld!");
+  res.send(registeredUser);
 });
 
 app.use("/listings", listings);
