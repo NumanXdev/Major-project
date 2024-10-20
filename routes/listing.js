@@ -4,6 +4,7 @@ const listing = require("../models/listing");
 const wrapAsync = require("../utils/wrapAsync.js");
 const ExpressError = require("../utils/ExpressError.js");
 const { ListingSchema } = require("../schema.js");
+const {isLoggedIn}=require("../Middleware.js")
 
 //Making function of validation using it as a middleware
 //for listing (Server side)
@@ -27,8 +28,15 @@ router.get(
   })
 );
 // Create route
-router.get("/new", (req, res) => {
+router.get("/new", isLoggedIn,(req, res) => {
   // res.send("Working")
+  // console.log(req.user);
+  //using middleware for isAuthenticated()
+  // if (!req.isAuthenticated()) {
+  //   req.flash("error", "Yoy must be logged in to create listings!");
+  //   return res.redirect("/login");
+  // }
+
   res.render("listings/new.ejs");
 });
 
@@ -51,6 +59,7 @@ router.get(
 //Create route
 router.post(
   "/",
+  isLoggedIn,
   validateListing, //middleware of validation schema
   wrapAsync(async (req, res, next) => {
     //let {title,description,price,image,country,location}=req.body
@@ -67,10 +76,11 @@ router.post(
   })
 );
 
-//Update Route
+//Edit Route
 
 router.get(
   "/:id/edit",
+  isLoggedIn,
   wrapAsync(async (req, res) => {
     // res.send("Working!")
     let { id } = req.params;
@@ -86,6 +96,7 @@ router.get(
 //Update Route
 router.put(
   "/:id",
+  isLoggedIn,
   validateListing, //Middleware for Validation Schema
   wrapAsync(async (req, res) => {
     let { id } = req.params;
@@ -102,6 +113,7 @@ router.put(
 //Delete route
 router.delete(
   "/:id",
+  isLoggedIn,
   wrapAsync(async (req, res) => {
     let { id } = req.params;
     await listing.findByIdAndDelete(id);
@@ -111,3 +123,4 @@ router.delete(
 );
 
 module.exports = router;
+ 
