@@ -2,15 +2,15 @@
 <% layout("/layouts/biolerplate") %> 
 <body>
 <ul>
-<h3>All listings:</h3>
+<h3 class="offset-5">All Listings</h3>
 <!-- <form action="/listings/new" method="GET"> 
     <button>Create New Listings</button></BR>
 </form> -->
-<div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 rows-xs-1">
+<div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 rows-xs-1 mt-4">
     <% for(let listings of allListings){ %>
 
         <a href="/listings/<%= listings._id %>" class="listing-link"> <div class="card listing-card col" > 
-            <img src="<%=listings.image%>"  class="card-img-top" alt="Listing_image" style="height: 20rem;" >
+            <img src="<%=listings.image%>"  class="card-img-top" alt="Listing_image" style="height: 18rem;" >
             <div class="card-img-overlay ">&#8377 <%=listings.price%></div>
             <div class="card-body">
               <p class="card-text"><b> <%=listings.title%></b></p>
