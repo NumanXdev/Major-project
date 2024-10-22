@@ -4,7 +4,7 @@ const listing = require("../models/listing");
 const wrapAsync = require("../utils/wrapAsync.js");
 const ExpressError = require("../utils/ExpressError.js");
 const { ListingSchema } = require("../schema.js");
-const {isLoggedIn}=require("../Middleware.js")
+const { isLoggedIn } = require("../Middleware.js");
 
 //Making function of validation using it as a middleware
 //for listing (Server side)
@@ -28,7 +28,7 @@ router.get(
   })
 );
 // Create route
-router.get("/new", isLoggedIn,(req, res) => {
+router.get("/new", isLoggedIn, (req, res) => {
   // res.send("Working")
   // console.log(req.user);
   //using middleware for isAuthenticated()
@@ -46,8 +46,11 @@ router.get(
   wrapAsync(async (req, res) => {
     // res.send("Working")
     let { id } = req.params;
-    const data = await listing.findById(id).populate("reviews");
-    // console.log(data)
+    const data = await listing
+      .findById(id)
+      .populate("reviews")
+      .populate("owner");
+    console.log(data);
     if (!data) {
       req.flash("error", "Listing you requested for doesn't exist");
       res.redirect("/listings");
@@ -70,7 +73,9 @@ router.post(
     // }
     const newListing = new listing(req.body.listing); // this will access that and will add that to database
     //req.body.listing is in the form of object "new lisiting({})"
+    newListing.owner = req.user._id;
     await newListing.save();
+    console.log(newListing.owner);
     req.flash("success", "New Listing Successfully Created!");
     return res.redirect("/listings");
   })
@@ -123,4 +128,3 @@ router.delete(
 );
 
 module.exports = router;
- 
