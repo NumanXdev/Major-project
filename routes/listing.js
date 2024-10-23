@@ -75,7 +75,7 @@ router.post(
     //req.body.listing is in the form of object "new lisiting({})"
     newListing.owner = req.user._id;
     await newListing.save();
-    console.log(newListing.owner);
+    // console.log(newListing.owner);
     req.flash("success", "New Listing Successfully Created!");
     return res.redirect("/listings");
   })
