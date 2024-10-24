@@ -4,21 +4,7 @@ const listing = require("../models/listing");
 const wrapAsync = require("../utils/wrapAsync.js");
 const ExpressError = require("../utils/ExpressError.js");
 const review = require("../models/review.js");
-const { reviewSchema } = require("../schema.js");
-
-//for Review serverside MW
-const validateReview = (req, res, next) => {
-  // console.log(req.body);
-  let { error } = reviewSchema.validate(req.body);
-
-  if (error) {
-    console.log(error.details);
-    let errMsg = error.details.map((el) => el.message).join(",");
-    throw new ExpressError(400, errMsg);
-  } else {
-    next();
-  }
-};
+const { validateReview } = require("../Middleware.js");
 
 //Reviews
 //Post Review Route

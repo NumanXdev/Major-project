@@ -2,22 +2,7 @@ const express = require("express");
 const router = express.Router();
 const listing = require("../models/listing");
 const wrapAsync = require("../utils/wrapAsync.js");
-const ExpressError = require("../utils/ExpressError.js");
-const { ListingSchema } = require("../schema.js");
-const { isLoggedIn } = require("../Middleware.js");
-
-//Making function of validation using it as a middleware
-//for listing (Server side)
-const validateListing = (req, res, next) => {
-  let { error } = ListingSchema.validate(req.body);
-  if (error) {
-    // console.log(error.details);
-    let errMsg = error.details.map((el) => el.message).join(",");
-    throw new ExpressError(400, errMsg);
-  } else {
-    next();
-  }
-};
+const { isLoggedIn, isOwner, validateListing } = require("../Middleware.js");
 
 //Index route
 router.get(
@@ -86,6 +71,7 @@ router.post(
 router.get(
   "/:id/edit",
   isLoggedIn,
+  isOwner,
   wrapAsync(async (req, res) => {
     // res.send("Working!")
     let { id } = req.params;
@@ -102,6 +88,7 @@ router.get(
 router.put(
   "/:id",
   isLoggedIn,
+  isOwner,
   validateListing, //Middleware for Validation Schema
   wrapAsync(async (req, res) => {
     let { id } = req.params;
@@ -119,6 +106,7 @@ router.put(
 router.delete(
   "/:id",
   isLoggedIn,
+  isOwner,
   wrapAsync(async (req, res) => {
     let { id } = req.params;
     await listing.findByIdAndDelete(id);
