@@ -23,7 +23,7 @@
       <p class="card-text"><%=data.country%></p>
     </div>
   </div>
-  <%if(currUser && currUser._id.equals(data.owner._id)){%>
+ 
   <div class="btns">
     <a href="/listings/<%=data._id%>/edit" class="btn btn-dark offset-3 add-btn"
       >Edit</a
@@ -33,7 +33,7 @@
       <button class="btn btn-dark offset-5">Delete</button>
     </form>
   </div>
-  <%}%>
+ 
 
   <div class="col-8 offset-3 mb-3">
     <hr />
