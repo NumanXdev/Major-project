@@ -4,13 +4,14 @@ const listing = require("../models/listing");
 const wrapAsync = require("../utils/wrapAsync.js");
 const ExpressError = require("../utils/ExpressError.js");
 const review = require("../models/review.js");
-const { validateReview } = require("../Middleware.js");
+const { validateReview, isLoggedIn } = require("../Middleware.js");
 
 //Reviews
 //Post Review Route
 
 router.post(
   "/",
+  isLoggedIn,
   validateReview,
   wrapAsync(async (req, res) => {
     // let {id}=req.params;
@@ -18,7 +19,7 @@ router.post(
     let listings = await listing.findById(req.params.id);
     let newReview = new review(req.body.review);
     // console.log(newReview);
-
+    newReview.author=req.user._id;
     listings.reviews.push(newReview);
     await newReview.save();
     await listings.save();
