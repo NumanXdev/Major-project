@@ -2,9 +2,12 @@ const express = require("express");
 const router = express.Router({ mergeParams: true });
 const listing = require("../models/listing");
 const wrapAsync = require("../utils/wrapAsync.js");
-const ExpressError = require("../utils/ExpressError.js");
 const review = require("../models/review.js");
-const { validateReview, isLoggedIn } = require("../Middleware.js");
+const {
+  validateReview,
+  isLoggedIn,
+  isreviewAuthor,
+} = require("../Middleware.js");
 
 //Reviews
 //Post Review Route
@@ -19,7 +22,7 @@ router.post(
     let listings = await listing.findById(req.params.id);
     let newReview = new review(req.body.review);
     // console.log(newReview);
-    newReview.author=req.user._id;
+    newReview.author = req.user._id;
     listings.reviews.push(newReview);
     await newReview.save();
     await listings.save();
@@ -34,6 +37,8 @@ router.post(
 //Delete Review Route
 router.delete(
   "/:reviewId",
+  isLoggedIn,
+  isreviewAuthor,
   wrapAsync(async (req, res) => {
     let { id, reviewId } = req.params;
     await listing.findByIdAndUpdate(id, { $pull: { reviews: reviewId } }); //Using $pull to delete the objectId in review array
